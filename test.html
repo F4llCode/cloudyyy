@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudyyy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+    <!-- Aesthetic font -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Sacramento', cursive;
+            /* Aesthetic font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('bg.gif') no-repeat center center fixed;
+            background-size: cover;
+            overflow: hidden;
+            cursor: none;
+            /* Hide the default cursor */
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            /* Darken the background */
+            backdrop-filter: blur(8px);
+            /* Blur effect */
+        }
+
+        .card {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            width: 400px;
+            text-align: center;
+            color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease-out;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 48px;
+            letter-spacing: 4px;
+            animation: colorChange 4s infinite;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #ffecd2, #a1c4fd);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        p {
+            font-size: 28px;
+            margin-top: 15px;
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-radius: 50%;
+            position: absolute;
+            pointer-events: none;
+            transition: transform 0.1s ease;
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 1000;
+            /* Make sure cursor is on top */
+        }
+
+        #custom-cursor.click {
+            transform: translate(-50%, -50%) scale(2);
+        }
+
+        /* Enter screen */
+        #enter-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            /* On top */
+            transition: opacity 1s ease-in-out;
+        }
+
+        #enter-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #enter-icon {
+            font-size: 80px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        #enter-icon:hover {
+            transform: scale(1.2);
+            /* Hover effect on butterfly */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Enter Screen -->
+    <div id="enter-screen">
+        <div id="enter-icon">🦋</div>
+    </div>
+
+    <!-- Overlay and Main Content -->
+    <div class="overlay"></div>
+
+    <div class="card" id="tilt-card">
+        <h1>Cloudyyy</h1>
+        <p>✝️</p>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Audio File -->
+    <audio id="background-music" loop>
+        <source src="ivy.mp3" type="audio/mp3">
+        Your browser does not support the audio tag.
+    </audio>
+
+    <script>
+        // Tilt effect for the card
+        const card = document.getElementById('tilt-card');
+        const cursor = document.getElementById('custom-cursor');
+        const music = document.getElementById('background-music');
+
+        document.addEventListener('mousemove', (event) => {
+            const { clientX, clientY } = event;
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            // Calculate the center point offset of the mouse position
+            const xRotation = ((clientY / windowHeight) - 0.5) * 15; // -7.5 to 7.5 degrees
+            const yRotation = ((clientX / windowWidth) - 0.5) * 15; // -7.5 to 7.5 degrees
+
+            // Apply rotation to the card
+            card.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+
+            // Move custom cursor
+            cursor.style.left = `${event.pageX}px`;
+            cursor.style.top = `${event.pageY}px`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            // Reset the card to its original position when the mouse leaves
+            card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+
+        // Click to enter main content and play music
+        document.getElementById('enter-icon').addEventListener('click', function () {
+            document.getElementById('enter-screen').classList.add('hidden');
+            music.play().catch((e) => {
+                console.log('Music play error:', e);
+            }); // Play music after the user clicks
+        });
+    </script>
+</body>
+
+</html>
